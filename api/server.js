@@ -1,7 +1,7 @@
 const express = require('express');
 const recipesRouter = require('./recipes/recipes-router');
 
-const server = express.Router();
+const server = express();
 
 server.use(express.json());
 
