@@ -1,14 +1,11 @@
 const db = require('../../data/db-config');
 
 // SELECT 
-//     recipes.recipe_id,
-//     recipes.recipe_name,
-//     recipes.created_at,
+//     recipes.*
 //     steps.step_id,
 //     steps.step_number,
 //     steps.step_instructions,
-//     ingredients.ingredient_id,
-//     ingredients.ingredient_name,
+//     ingredients.*,
 //     step_ingredients.quantity 
 // FROM recipes
 // LEFT JOIN step_ingredients ON recipes.recipe_id = step_ingredients.recipe_id
@@ -18,7 +15,12 @@ const db = require('../../data/db-config');
 
 async function getRecipeById(recipe_id) {
     const recipeRows = await db('recipes as r')
-        .where('recipe_id', recipe_id)
+        .leftJoin('step_ingredients as si', 'r.recipe_id', 'si.recipe_id')
+        .leftJoin('steps as st', 'si.step_id', 'st.step_id')
+        .leftJoin('ingredients as i', 'i.ingredient_id', 'si.ingredient_id')
+        .select('r.*', 'st.step_id', 'st.step_number', 'st.step_instructions', 'i.*', 'si.quantity')
+        .where('r.recipe_id', recipe_id)
+        .orderBy('r.recipe_id')
 
     return recipeRows
 }
