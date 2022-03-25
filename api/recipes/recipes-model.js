@@ -22,7 +22,29 @@ async function getRecipeById(recipe_id) {
         .where('r.recipe_id', recipe_id)
         .orderBy('r.recipe_id')
 
-    return recipeRows
+    const result = {
+        recipe_id: recipeRows[0].recipe_id,
+        recipe_name: recipeRows[0].recipe_name,
+        created_at: recipeRows[0].created_at,
+        steps: recipeRows.reduce((steps, step) => {
+            if (!step.step_id) return steps;
+            return steps.concat({
+                step_id: step.step_id,
+                step_number: step.step_number,
+                step_instructions: step.step_instructions,
+                ingredients: recipeRows.reduce((ingredients, ingredient) => {
+                    if(!ingredient.ingredient_id) return ingredients;
+                    return ingredients.concat({
+                        ingredient_id: ingredient.ingredient_id,
+                        ingredient_name: ingredient.ingredient_name,
+                        quantity: ingredient.quantity
+                    })
+                }, [])
+            })
+        }, [])
+    }
+
+    return result
 }
 
 module.exports = { getRecipeById }
