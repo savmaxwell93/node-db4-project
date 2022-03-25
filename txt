@@ -1,0 +1,12 @@
+SELECT 
+     recipes.*,
+     steps.step_id,
+     steps.step_number,
+     steps.step_instructions,
+ --    ingredients.*,
+     step_ingredients.quantity 
+ FROM recipes
+ LEFT JOIN steps ON recipes.recipe_id = steps.recipe_id
+ LEFT JOIN step_ingredients ON steps.recipe_id = step_ingredients.recipe_id AND step_ingredients.step_id = steps.step_id
+ --LEFT JOIN ingredients ON ingredients.ingredient_id = step_ingredients.ingredient_id
+-- WHERE recipes.recipe_id = 2
