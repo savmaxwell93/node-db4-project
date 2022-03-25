@@ -35,6 +35,13 @@ exports.up = async function(knex) {
     .createTable('step_ingredients', tbl => {
         tbl.increments('step_ingredient_id')
         tbl.string('quantity').notNullable()
+        tbl.integer('recipe_id')
+            .unsigned()
+            .notNullable()
+            .references('recipe_id')
+            .inTable('recipes')
+            .onDelete('RESTRICT')
+            .onUpdate('RESTRICT')
         tbl.integer('step_id')
             .unsigned()
             .notNullable()
