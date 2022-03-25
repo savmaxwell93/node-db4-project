@@ -16,7 +16,7 @@ const db = require('../../data/db-config');
 async function getRecipeById(recipe_id) {
     const recipeRows = await db('recipes as r')
         .leftJoin('step_ingredients as si', 'r.recipe_id', 'si.recipe_id')
-        .leftJoin('steps as st', 'si.step_id', 'st.step_id')
+        .join('steps as st', 'r.recipe_id', 'st.recipe_id')
         .leftJoin('ingredients as i', 'i.ingredient_id', 'si.ingredient_id')
         .select('r.*', 'st.step_id', 'st.step_number', 'st.step_instructions', 'i.*', 'si.quantity')
         .where('r.recipe_id', recipe_id)
